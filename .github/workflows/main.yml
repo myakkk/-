@@ -36,27 +36,23 @@ jobs:
         with:
           flutter-version: '3.27.1'
 
-      - name: Fix Project Name (Rename Folder)
-        # БҰЛ ҚАДАМ ӨТЕ МАҢЫЗДЫ!
-        # Жобаны "satbaev-ubt" (сызықша) папкасынан "satbaev_ubt" (астын сызу) папкасына көшіреміз.
-        # Себебі Dart/Flutter сызықшаны қабылдамайды.
+      - name: Prepare Project Folder
+        # БҰЛ ЖЕРДІ ӨЗГЕРТТІК:
+        # Папканы сыртқа (../) емес, ІШКЕ қарай көшіреміз.
+        # "satbaev_ubt" деген папка ашып, барлық python файлдарын соған саламыз.
         run: |
-          mkdir ../satbaev_ubt
-          mv * ../satbaev_ubt/
-          mv .github ../satbaev_ubt/ || true
-          mv .gitignore ../satbaev_ubt/ || true
-          cd ../satbaev_ubt
+          mkdir satbaev_ubt
+          mv main.py database.py questions.py requirements.txt satbaev_ubt/
 
       - name: Flet Build APK
-        # Енді біз "satbaev_ubt" папкасының ішіндеміз.
-        # Артық аргументтердің бәрін алып тастадық, тек таза build жасаймыз.
+        # Жаңа папканың ішіне кіріп, build жасаймыз
         run: |
-          cd ../satbaev_ubt
+          cd satbaev_ubt
           yes | flet build apk --verbose
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: satbaev-ubt-app
-          # APK файл енді жаңа папканың ішінде болады
-          path: ../satbaev_ubt/build/apk/app-release.apk
+          # Енді жол дұрыс көрсетілді (нүктелер жоқ)
+          path: satbaev_ubt/build/apk/app-release.apk
