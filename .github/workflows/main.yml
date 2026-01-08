@@ -34,19 +34,18 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
-
-      - name: Accept Android Licenses
-        run: |
-          yes | flutter doctor --android-licenses
+          flutter-version: '3.27.1'
 
       - name: Flet Build APK
-        # МАҢЫЗДЫ: --project-name қосылды (тек ағылшын әрпі және астын сызу _)
+        # МАҢЫЗДЫ ӨЗГЕРІСТЕР:
+        # 1. --project-name алынып тасталды (ол қате)
+        # 2. --org қосылды (бұл пакет аты үшін керек)
+        # 3. Соңына нүкте (.) қойылды - бұл "осы папканы ал" деген сөз
         run: |
-          flet build apk --project-name satbaev_ubt --verbose
+          yes | flet build apk --org kz.satbaev.ubt --product "Satbaev UBT" --verbose .
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Satbaev
+          name: satbaev-ubt-app
           path: build/apk/app-release.apk
